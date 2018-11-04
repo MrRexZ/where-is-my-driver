@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"github.com/mongodb/mongo-go-driver/mongo"
 	"gojek-1st/pkg/entity"
 	"log"
 	"testing"
@@ -15,26 +14,6 @@ const (
 
 func Test_DriverService(t *testing.T) {
 	t.Run("CreateDriver", createDriver_should_insert_correctly)
-}
-
-func CreateMongoClient(mongoUrl string) (*mongo.Client, error) {
-	client, err := mongo.NewClient(mongoUrl)
-	if err != nil {
-		log.Fatalf("Unable to connect to mongo: %s", err)
-	}
-	err = client.Connect(context.Background())
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return client, err
-}
-
-func CreateMongoRepository(client *mongo.Client, dbName string) *MongoRepository {
-
-	mongoRepository := NewMongoRepository(client, dbName)
-	return mongoRepository
-
 }
 
 func createDriver_should_insert_correctly(t *testing.T) {
@@ -71,4 +50,8 @@ func createDriver_should_insert_correctly(t *testing.T) {
 	if results[0].Id != driver.Id {
 		t.Error("Incorrect Id. Expected `%i`, Got: `%i`", driver.Id, results[0].Id)
 	}
+
+	defer func() {
+		DropDatabase(client, dbName)
+	}()
 }
