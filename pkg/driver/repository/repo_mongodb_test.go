@@ -9,9 +9,8 @@ import (
 )
 
 const (
-	mongoUrl       = "localhost:27017"
-	dbName         = "test_db"
-	collectionName = "driver"
+	mongoUrl = "mongodb://localhost:27017"
+	dbName   = "test_db"
 )
 
 func Test_DriverService(t *testing.T) {
@@ -48,10 +47,10 @@ func createDriver_should_insert_correctly(t *testing.T) {
 		Id:       2,
 	}
 
-	id, err := mongoRepository.Store(&driver)
+	_, err = mongoRepository.Store(&driver)
 
 	if err != nil {
-		t.Error("Unable to create driver: %s", err)
+		t.Errorf("Unable to create driver: %s", err.Error())
 	}
 	var results []entity.Driver
 	cursor, err := client.Database(dbName).Collection(collectionName).Find(context.Background(), nil)
@@ -70,6 +69,6 @@ func createDriver_should_insert_correctly(t *testing.T) {
 		t.Error("Incorrect number of results. Expected `1`, got: `%i`", count)
 	}
 	if results[0].Id != driver.Id {
-		t.Error("Incorrect Id. Expected `%s`, Got: `%s`", driver.Id, results[0].Id)
+		t.Error("Incorrect Id. Expected `%i`, Got: `%i`", driver.Id, results[0].Id)
 	}
 }
