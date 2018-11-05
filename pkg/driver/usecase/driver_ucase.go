@@ -67,5 +67,14 @@ func getMetersDistanceLatsLngs(la1 float64, lo1 float64, la2 float64, lo2 float6
 }
 
 func (du *DriverUsecase) UpdateLocation(id int32, lat float64, long float64, accuracy float64) (err error) {
+
 	return errors.New("")
+}
+
+func (du *DriverUsecase) IsValidLatLng(lat float64, long float64) (valid bool) {
+	return false
+}
+
+func (du *DriverUsecase) IsValidId(id int32) (valid bool) {
+	return false
 }
