@@ -155,9 +155,8 @@ func UpdateDriver_incorrect_id_50001(t *testing.T) {
 	incorrectIdDriver := CreateUpperboundIdDriver()
 	driverUcase := NewDriverUsecase(mockRepo)
 	_, err := driverUcase.UpdateLocation(incorrectIdDriver.Id, incorrectIdDriver.Lat, incorrectIdDriver.Long, incorrectIdDriver.Accuracy)
-	if _, ok := err.(*IdErr); !ok {
-		t.Error("Not IdErr")
-	}
+	_, ok := err.(*IdErr)
+	assert.True(t, ok)
 
 }
 
@@ -166,9 +165,8 @@ func UpdateDriver_incorrect_id_0(t *testing.T) {
 	incorrectIdDriver := CreateLowerboundIdDriver()
 	driverUcase := NewDriverUsecase(mockRepo)
 	_, err := driverUcase.UpdateLocation(incorrectIdDriver.Id, incorrectIdDriver.Lat, incorrectIdDriver.Long, incorrectIdDriver.Accuracy)
-	if _, ok := err.(*IdErr); !ok {
-		t.Error("Not IdErr")
-	}
+	_, ok := err.(*IdErr)
+	assert.True(t, ok)
 
 }
 

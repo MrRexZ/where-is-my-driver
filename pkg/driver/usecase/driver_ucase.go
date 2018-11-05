@@ -14,19 +14,19 @@ const (
 )
 
 type LatLngErr struct {
-	msg string
+	Msg string
 }
 
 type IdErr struct {
-	msg string
+	Msg string
 }
 
 func (e *LatLngErr) Error() string {
-	return fmt.Sprintf("LatLng error : %s", e.msg)
+	return fmt.Sprintf("LatLng error : %s", e.Msg)
 }
 
 func (e *IdErr) Error() string {
-	return fmt.Sprintf("Id error : %s", e.msg)
+	return fmt.Sprintf("Id error : %s", e.Msg)
 }
 
 type DriverUsecase struct {
