@@ -1,8 +1,9 @@
 package repository
 
 import (
-	"context"
+	"github.com/mongodb/mongo-go-driver/bson"
 	"github.com/mongodb/mongo-go-driver/mongo"
+	"github.com/mongodb/mongo-go-driver/mongo/replaceopt"
 	"gojek-1st/pkg/entity"
 	"log"
 )
@@ -25,9 +26,11 @@ func NewMongoRepository(client *mongo.Client, db string) *MongoRepository {
 	}
 }
 
-func (mr *MongoRepository) Store(d *entity.Driver) (uint8, error) {
+func (mr *MongoRepository) Store(d *entity.Driver) (int32, error) {
+	_, err := mr.collection.ReplaceOne(nil, bson.NewDocument(
+		bson.EC.Int32("id", d.Id),
+	), d, replaceopt.Upsert(true))
 
-	_, err := mr.collection.InsertOne(context.Background(), d)
 	if err != nil {
 		log.Fatal(err)
 	}
