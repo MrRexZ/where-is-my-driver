@@ -12,7 +12,7 @@ import (
 
 const (
 	updateDriverPath = "/drivers/{id}/location"
-	getDriversPath   = "/drivers"
+	findDriversPath  = "/drivers"
 )
 
 func UpdateDriver(driverUsecase driver.Usecase) http.Handler {
@@ -61,6 +61,6 @@ func FindDrivers(driverUsecase driver.Usecase) http.Handler {
 
 func MakeDriverHandlers(r *mux.Router, service driver.Usecase) {
 	r.Handle(updateDriverPath, UpdateDriver(service)).Methods("PUT").Name("updateDriver")
-	r.Handle(getDriversPath, FindDrivers(service)).Methods("GET").Name("findDrivers")
+	r.Handle(findDriversPath, FindDrivers(service)).Methods("GET").Name("findDrivers")
 
 }
