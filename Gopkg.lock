@@ -117,6 +117,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:2a9f7ca80c3035b7e68a927db100922d4a266a31cea2568d9a5185a90b469279"
+  name = "github.com/umahmood/haversine"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "808ab04add26660fd241ddb7973886c6dd6669e8"
+
+[[projects]]
+  branch = "master"
   digest = "1:40fdfd6ab85ca32b6935853bbba35935dcb1d796c8135efd85947566c76e662e"
   name = "github.com/xdg/scram"
   packages = ["."]
@@ -176,7 +184,9 @@
   input-imports = [
     "github.com/mongodb/mongo-go-driver/bson",
     "github.com/mongodb/mongo-go-driver/mongo",
+    "github.com/mongodb/mongo-go-driver/mongo/replaceopt",
     "github.com/stretchr/testify/mock",
+    "github.com/umahmood/haversine",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
