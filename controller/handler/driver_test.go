@@ -53,8 +53,7 @@ func TestUpdateDriver_validId_validLatLng(t *testing.T) {
 	path, err := r.GetRoute("updateDriver").GetPathTemplate()
 	assert.Nil(t, err)
 	assert.Equal(t, updateDriverPath, path)
-	handler := UpdateDriver(ucase)
-	ts := httptest.NewServer(handler)
+	ts := httptest.NewServer(r)
 	body := fmt.Sprintf(`{
 	"latitude": 12.971,
 	"longitude": 23.1,
@@ -70,6 +69,14 @@ func TestUpdateDriver_validId_validLatLng(t *testing.T) {
 	json.NewDecoder(rr.Body).Decode(&driver)
 	assert.Equal(t, dId, driver.Id)
 	defer ts.Close()
+}
+
+func TestUpdateDriver_invalidId_validLatLng(t *testing.T) {
+
+}
+
+func TestUpdateDriver_validId_invalidLatLng(t *testing.T) {
+
 }
 
 func TestFindDrivers_validLatlng(t *testing.T) {
