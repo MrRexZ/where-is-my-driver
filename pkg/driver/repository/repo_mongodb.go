@@ -30,11 +30,16 @@ func (mr *MongoRepository) Store(d *entity.Driver) (int32, error) {
 	_, err := mr.collection.ReplaceOne(nil, bson.NewDocument(
 		bson.EC.Int32("id", d.Id),
 	), d, replaceopt.Upsert(true))
-
 	if err != nil {
 		log.Fatal(err)
 	}
 	return d.Id, err
+}
+
+func (mr *MongoRepository) StoreMany(ds []*entity.Driver) error {
+	for _, v := range ds {
+		mr.Store(v)
+	}
 }
 
 func (mr *MongoRepository) Get(id int32) (d *entity.Driver, err error) {
@@ -43,4 +48,8 @@ func (mr *MongoRepository) Get(id int32) (d *entity.Driver, err error) {
 		bson.NewDocument(bson.EC.Int32("id", id)))
 	doc_res.Decode(&driver)
 	return &driver, err
+}
+
+func (mr *MongoRepository) GetWithinLatLng(lat float64, long float64, dist float64) ([]*entity.Driver, error) {
+	return nil, nil
 }

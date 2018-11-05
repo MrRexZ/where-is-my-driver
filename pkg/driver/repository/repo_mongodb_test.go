@@ -154,3 +154,16 @@ func GetDriver_should_get_correct_driver_info(t *testing.T) {
 		DropDatabase(client, dbName)
 	}()
 }
+
+func GetDriverWithinLatLngBounds_should_get_correct_info(t *testing.T) {
+	client, err := CreateMongoClient(mongoUrl)
+	mongoRepository := CreateMongoRepository(client, dbName)
+	driver1 := CreateTestDriver1()
+	driver2 := CreateTestDriver2()
+	driver3 := CreateTestDriver3()
+	drivers := []*entity.Driver{&driver1, &driver2, &driver3}
+	err = mongoRepository.StoreMany(drivers)
+	if err != nil {
+		t.Errorf("Unable to create driver: %s", err.Error())
+	}
+}
