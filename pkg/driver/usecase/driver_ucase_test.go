@@ -134,7 +134,7 @@ func UpdateDriver_correct_latlng_correct_id(t *testing.T) {
 	correctLatLngDriver := CreateValidDriver()
 	mockRepo.On("Store", &correctLatLngDriver).Return(correctLatLngDriver.Id, nil)
 	driverUcase := NewDriverUsecase(mockRepo)
-	err := driverUcase.UpdateLocation(correctLatLngDriver.Id, correctLatLngDriver.Lat, correctLatLngDriver.Long, correctLatLngDriver.Accuracy)
+	_, err := driverUcase.UpdateLocation(correctLatLngDriver.Id, correctLatLngDriver.Lat, correctLatLngDriver.Long, correctLatLngDriver.Accuracy)
 	if err != nil {
 		t.Error("There is an error!")
 	}
@@ -145,7 +145,7 @@ func UpdateDriver_incorrect_lat_lng(t *testing.T) {
 	mockRepo := new(mocks.Repository)
 	incorrectLatLngDriver := CreateIncorrectLatLngDriver()
 	driverUcase := NewDriverUsecase(mockRepo)
-	err := driverUcase.UpdateLocation(incorrectLatLngDriver.Id, incorrectLatLngDriver.Lat, incorrectLatLngDriver.Long, incorrectLatLngDriver.Accuracy)
+	_, err := driverUcase.UpdateLocation(incorrectLatLngDriver.Id, incorrectLatLngDriver.Lat, incorrectLatLngDriver.Long, incorrectLatLngDriver.Accuracy)
 	if _, ok := err.(*LatLngErr); !ok {
 		t.Error("Not LatLngErr")
 	}
@@ -155,7 +155,7 @@ func UpdateDriver_incorrect_id_50001(t *testing.T) {
 	mockRepo := new(mocks.Repository)
 	incorrectIdDriver := CreateUpperboundIdDriver()
 	driverUcase := NewDriverUsecase(mockRepo)
-	err := driverUcase.UpdateLocation(incorrectIdDriver.Id, incorrectIdDriver.Lat, incorrectIdDriver.Long, incorrectIdDriver.Accuracy)
+	_, err := driverUcase.UpdateLocation(incorrectIdDriver.Id, incorrectIdDriver.Lat, incorrectIdDriver.Long, incorrectIdDriver.Accuracy)
 	if _, ok := err.(*IdErr); !ok {
 		t.Error("Not IdErr")
 	}
@@ -166,7 +166,7 @@ func UpdateDriver_incorrect_id_0(t *testing.T) {
 	mockRepo := new(mocks.Repository)
 	incorrectIdDriver := CreateLowerboundIdDriver()
 	driverUcase := NewDriverUsecase(mockRepo)
-	err := driverUcase.UpdateLocation(incorrectIdDriver.Id, incorrectIdDriver.Lat, incorrectIdDriver.Long, incorrectIdDriver.Accuracy)
+	_, err := driverUcase.UpdateLocation(incorrectIdDriver.Id, incorrectIdDriver.Lat, incorrectIdDriver.Long, incorrectIdDriver.Accuracy)
 	if _, ok := err.(*IdErr); !ok {
 		t.Error("Not IdErr")
 	}
