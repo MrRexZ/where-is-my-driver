@@ -69,7 +69,7 @@ func (du *DriverUsecase) UpdateLocation(id int32, lat float64, long float64, acc
 		return 0, &IdErr{"ID out of bound"}
 	}
 	if !du.IsValidLatLng(lat, long) {
-		return 0, &LatLngErr{"LatLng out of bound"}
+		return 0, &LatLngErr{"LatLng should be between +/-90"}
 	}
 	driver := entity.Driver{Id: id, Lat: lat, Long: long, Accuracy: accuracy}
 	id, err := du.repo.Store(&driver)
