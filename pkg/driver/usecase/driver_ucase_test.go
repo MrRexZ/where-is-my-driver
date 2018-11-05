@@ -68,7 +68,7 @@ func CreateUpperboundIdDriver() entity.Driver {
 		Accuracy: 0.7,
 		Lat:      3.606002,
 		Long:     8.843245,
-		Id:       InvalidIdUpperBound(),
+		Id:       highestId + 1,
 	}
 }
 
@@ -77,7 +77,7 @@ func CreateLowerboundIdDriver() entity.Driver {
 		Accuracy: 0.7,
 		Lat:      3.606002,
 		Long:     8.843245,
-		Id:       InvalidIdLowerBound(),
+		Id:       lowestId - 1,
 	}
 }
 
@@ -99,14 +99,6 @@ func InvalidLatLng() (lat float64, long float64) {
 
 func ValidId() (id int32) {
 	return 1
-}
-
-func InvalidIdLowerBound() (id int32) {
-	return 0
-}
-
-func InvalidIdUpperBound() (id int32) {
-	return 50001
 }
 
 func GetDriverWithinLatLngBounds_should_get_correct_info(t *testing.T) {
@@ -196,6 +188,6 @@ func IsValidId_valid(t *testing.T) {
 func IsValidId_invalid(t *testing.T) {
 	mockRepo := new(mocks.Repository)
 	driverUcase := NewDriverUsecase(mockRepo)
-	assert.False(t, driverUcase.IsValidId(InvalidIdUpperBound()))
-	assert.False(t, driverUcase.IsValidId(InvalidIdLowerBound()))
+	assert.False(t, driverUcase.IsValidId(highestId+1))
+	assert.False(t, driverUcase.IsValidId(lowestId-1))
 }
