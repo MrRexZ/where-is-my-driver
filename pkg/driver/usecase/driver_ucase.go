@@ -48,6 +48,6 @@ func getMetersDistanceLatsLngs(la1 float64, lo1 float64, la2 float64, lo2 float6
 
 }
 
-func (du *DriverUsecase) UpdateLocation(id string) (err error) {
+func (du *DriverUsecase) UpdateLocation(id string, lat float64, long float64, accuracy float64) (err error) {
 	return nil
 }
