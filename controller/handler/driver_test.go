@@ -35,15 +35,6 @@ func CreateTestDriver2() entity.Driver {
 	}
 }
 
-func CreateTestDriver3() entity.Driver {
-	return entity.Driver{
-		Accuracy: 0.7,
-		Lat:      51.508034,
-		Long:     0.084315,
-		Id:       4,
-	}
-}
-
 func TestUpdateDriver_validId_validLatLng(t *testing.T) {
 
 	var dId int32 = 1
@@ -77,7 +68,7 @@ func TestUpdateDriver_invalidId_validLatLng(t *testing.T) {
 	var dId int32 = 0
 	ucase := new(mocks.Usecase)
 	r := mux.NewRouter()
-	ucase.On("UpdateLocation", dId, mock.Anything, mock.Anything, mock.Anything).Return(dId, usecase.IdErr{})
+	ucase.On("UpdateLocation", dId, mock.Anything, mock.Anything, mock.Anything).Return(dId, &usecase.IdErr{Msg: "ID out of bound"})
 	MakeDriverHandlers(r, ucase)
 	path, err := r.GetRoute("updateDriver").GetPathTemplate()
 	assert.Nil(t, err)
