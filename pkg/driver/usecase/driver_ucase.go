@@ -6,6 +6,12 @@ import (
 	"github.com/umahmood/haversine"
 	"gojek-1st/pkg/driver"
 	"gojek-1st/pkg/entity"
+	"math"
+)
+
+const (
+	lowestId  = 1
+	highestId = 50000
 )
 
 type LatLngErr struct {
@@ -72,9 +78,15 @@ func (du *DriverUsecase) UpdateLocation(id int32, lat float64, long float64, acc
 }
 
 func (du *DriverUsecase) IsValidLatLng(lat float64, long float64) (valid bool) {
-	return false
+	if math.Abs(lat) > 90 || math.Abs(long) > 90 {
+		return false
+	}
+	return true
 }
 
 func (du *DriverUsecase) IsValidId(id int32) (valid bool) {
+	if id >= lowestId && id <= highestId {
+		return true
+	}
 	return false
 }
