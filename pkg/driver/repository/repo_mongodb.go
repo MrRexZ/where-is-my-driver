@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"github.com/mongodb/mongo-go-driver/bson"
 	"github.com/mongodb/mongo-go-driver/mongo"
 	"github.com/mongodb/mongo-go-driver/mongo/replaceopt"
@@ -37,9 +38,11 @@ func (mr *MongoRepository) Store(d *entity.Driver) (int32, error) {
 }
 
 func (mr *MongoRepository) StoreMany(ds []*entity.Driver) error {
+	var err error
 	for _, v := range ds {
-		mr.Store(v)
+		_, err = mr.Store(v)
 	}
+	return err
 }
 
 func (mr *MongoRepository) Get(id int32) (d *entity.Driver, err error) {
@@ -48,6 +51,17 @@ func (mr *MongoRepository) Get(id int32) (d *entity.Driver, err error) {
 		bson.NewDocument(bson.EC.Int32("id", id)))
 	doc_res.Decode(&driver)
 	return &driver, err
+}
+
+func (mr *MongoRepository) GetAll() (ds []*entity.Driver, err error) {
+	cursor, err := mr.collection.Find(nil, nil)
+	var drivers []*entity.Driver
+	for cursor.Next(context.Background()) {
+		driver := entity.Driver{}
+		err = cursor.Decode(&driver)
+		drivers = append(drivers, &driver)
+	}
+	return drivers, err
 }
 
 func (mr *MongoRepository) GetWithinLatLng(lat float64, long float64, dist float64) ([]*entity.Driver, error) {
