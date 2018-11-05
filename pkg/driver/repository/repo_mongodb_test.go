@@ -170,6 +170,6 @@ func GetAllDrivers_should_have_correct_count(t *testing.T) {
 	results, err := mongoRepository.GetAll()
 	count := len(results)
 	if count != 3 {
-		t.Error("Incorrect number of results. Expected `1`, got: `%i`", count)
+		t.Error("Incorrect number of results. Expected `3`, got: `%i`", count)
 	}
 }
