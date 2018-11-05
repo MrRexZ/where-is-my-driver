@@ -38,5 +38,9 @@ func (mr *MongoRepository) Store(d *entity.Driver) (int32, error) {
 }
 
 func (mr *MongoRepository) Get(id int32) (d *entity.Driver, err error) {
-	return nil, nil
+	driver := entity.Driver{}
+	doc_res := mr.collection.FindOne(nil,
+		bson.NewDocument(bson.EC.Int32("id", id)))
+	doc_res.Decode(&driver)
+	return &driver, err
 }

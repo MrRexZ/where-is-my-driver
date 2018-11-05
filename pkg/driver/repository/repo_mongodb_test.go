@@ -123,13 +123,8 @@ func GetDriver_should_get_correct_driver_info(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unable to create driver: %s", err.Error())
 	}
-	var results []entity.Driver
-
 	actual_driver, err := mongoRepository.Get(driver.Id)
-	count := len(results)
-	if count != 1 {
-		t.Error("Incorrect number of results. Expected `1`, got: `%i`", count)
-	}
+
 	if actual_driver.Id != driver.Id {
 		t.Error("Incorrect Id. Expected `%i`, Got: `%i`", driver.Id, actual_driver.Id)
 	}
