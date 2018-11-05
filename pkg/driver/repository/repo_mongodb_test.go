@@ -38,6 +38,24 @@ func UpdatedTestDriver1() entity.Driver {
 	return test_driver_1
 }
 
+func CreateTestDriver2() entity.Driver {
+	return entity.Driver{
+		Accuracy: 0.8,
+		Lat:      1.3,
+		Long:     1.1,
+		Id:       3,
+	}
+}
+
+func CreateTestDriver3() entity.Driver {
+	return entity.Driver{
+		Accuracy: 0.7,
+		Lat:      19.3,
+		Long:     10.1,
+		Id:       4,
+	}
+}
+
 func createDriver_should_insert_correctly(t *testing.T) {
 	client, err := CreateMongoClient(mongoUrl)
 	mongoRepository := CreateMongoRepository(client, dbName)
