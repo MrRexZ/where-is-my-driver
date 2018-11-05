@@ -53,6 +53,15 @@ func CreateTestDriver3() entity.Driver {
 	}
 }
 
+func CreateValidDriver() entity.Driver {
+	return entity.Driver{
+		Accuracy: 0.7,
+		Lat:      3.606002,
+		Long:     8.843245,
+		Id:       4,
+	}
+}
+
 func CreateIncorrectLatLngDriver() entity.Driver {
 	lat, lng := InvalidLatLng()
 	return entity.Driver{
@@ -122,9 +131,10 @@ func GetDriverWithinLatLngBounds_should_get_correct_info(t *testing.T) {
 
 func UpdateDriver_correct_latlng_correct_id(t *testing.T) {
 	mockRepo := new(mocks.Repository)
-	incorrectLatLngDriver := CreateIncorrectLatLngDriver()
+	correctLatLngDriver := CreateValidDriver()
+	mockRepo.On("Store", &correctLatLngDriver).Return(correctLatLngDriver.Id, nil)
 	driverUcase := NewDriverUsecase(mockRepo)
-	err := driverUcase.UpdateLocation(incorrectLatLngDriver.Id, incorrectLatLngDriver.Lat, incorrectLatLngDriver.Long, incorrectLatLngDriver.Accuracy)
+	err := driverUcase.UpdateLocation(correctLatLngDriver.Id, correctLatLngDriver.Lat, correctLatLngDriver.Long, correctLatLngDriver.Accuracy)
 	if err != nil {
 		t.Error("There is an error!")
 	}

@@ -57,14 +57,14 @@ func (_m *Repository) GetAll() ([]*entity.Driver, error) {
 }
 
 // Store provides a mock function with given fields: d
-func (_m *Repository) Store(d *entity.Driver) (string, error) {
+func (_m *Repository) Store(d *entity.Driver) (int32, error) {
 	ret := _m.Called(d)
 
-	var r0 string
-	if rf, ok := ret.Get(0).(func(*entity.Driver) string); ok {
+	var r0 int32
+	if rf, ok := ret.Get(0).(func(*entity.Driver) int32); ok {
 		r0 = rf(d)
 	} else {
-		r0 = ret.Get(0).(string)
+		r0 = ret.Get(0).(int32)
 	}
 
 	var r1 error
