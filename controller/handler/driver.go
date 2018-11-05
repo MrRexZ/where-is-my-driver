@@ -61,6 +61,6 @@ func FindDrivers(driverUsecase driver.Usecase) http.Handler {
 
 func MakeDriverHandlers(r *mux.Router, service driver.Usecase) {
 	r.Handle(updateDriverPath, UpdateDriver(service)).Methods("PUT").Name("updateDriver")
-	r.Handle(getDriversPath, FindDrivers(service)).Methods("GET").Name("getDrivers")
+	r.Handle(getDriversPath, FindDrivers(service)).Methods("GET").Name("findDrivers")
 
 }
