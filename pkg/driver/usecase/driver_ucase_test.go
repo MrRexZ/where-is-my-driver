@@ -15,6 +15,10 @@ const (
 
 func Test_DriverService(t *testing.T) {
 	t.Run("GetDriverWithinLatLngBounds", GetDriverWithinLatLngBounds_should_get_correct_info)
+	t.Run("IsValidLatLng_valid", IsValidLatLng_valid)
+	t.Run("IsValidLatLng_invalid", IsValidLatLng_invalid)
+	t.Run("IsValidId_valid", IsValidId_valid)
+	t.Run("IsValidId_invalid", IsValidId_invalid)
 	t.Run("UpdateDriver_correct_latLng_correct_id", UpdateDriver_correct_latlng_correct_id)
 	t.Run("UpdateDriver_incorrect_latlng", UpdateDriver_incorrect_lat_lng)
 	t.Run("UpdateDriver_incorrect_id_0", UpdateDriver_incorrect_id_0)
@@ -50,30 +54,59 @@ func CreateTestDriver3() entity.Driver {
 }
 
 func CreateIncorrectLatLngDriver() entity.Driver {
+	lat, lng := InvalidLatLng()
 	return entity.Driver{
 		Accuracy: 0.7,
-		Lat:      93.606002,
-		Long:     98.843245,
+		Lat:      lat,
+		Long:     lng,
 		Id:       4,
 	}
 }
 
-func Create50001IdDriver() entity.Driver {
+func CreateUpperboundIdDriver() entity.Driver {
 	return entity.Driver{
 		Accuracy: 0.7,
 		Lat:      3.606002,
 		Long:     8.843245,
-		Id:       50001,
+		Id:       InvalidIdUpperBound(),
 	}
 }
 
-func Create0IdDriver() entity.Driver {
+func CreateLowerboundIdDriver() entity.Driver {
 	return entity.Driver{
 		Accuracy: 0.7,
 		Lat:      3.606002,
 		Long:     8.843245,
-		Id:       0,
+		Id:       InvalidIdLowerBound(),
 	}
+}
+
+func ValidLatLng() (lat float64, long float64) {
+	return 3, 2
+}
+
+func ValidLatInvalidLng() (lat float64, long float64) {
+	return 89, 91
+}
+
+func InvalidLatValidLng() (lat float64, long float64) {
+	return 91, 89
+}
+
+func InvalidLatLng() (lat float64, long float64) {
+	return 91, -91
+}
+
+func ValidId() (id int32) {
+	return 1
+}
+
+func InvalidIdLowerBound() (id int32) {
+	return 0
+}
+
+func InvalidIdUpperBound() (id int32) {
+	return 50001
 }
 
 func GetDriverWithinLatLngBounds_should_get_correct_info(t *testing.T) {
@@ -118,7 +151,7 @@ func UpdateDriver_incorrect_lat_lng(t *testing.T) {
 
 func UpdateDriver_incorrect_id_50001(t *testing.T) {
 	mockRepo := new(mocks.Repository)
-	incorrectIdDriver := Create50001IdDriver()
+	incorrectIdDriver := CreateUpperboundIdDriver()
 	driverUcase := NewDriverUsecase(mockRepo)
 	err := driverUcase.UpdateLocation(incorrectIdDriver.Id, incorrectIdDriver.Lat, incorrectIdDriver.Long, incorrectIdDriver.Accuracy)
 	if _, ok := err.(*IdErr); !ok {
@@ -129,11 +162,40 @@ func UpdateDriver_incorrect_id_50001(t *testing.T) {
 
 func UpdateDriver_incorrect_id_0(t *testing.T) {
 	mockRepo := new(mocks.Repository)
-	incorrectIdDriver := Create0IdDriver()
+	incorrectIdDriver := CreateLowerboundIdDriver()
 	driverUcase := NewDriverUsecase(mockRepo)
 	err := driverUcase.UpdateLocation(incorrectIdDriver.Id, incorrectIdDriver.Lat, incorrectIdDriver.Long, incorrectIdDriver.Accuracy)
 	if _, ok := err.(*IdErr); !ok {
 		t.Error("Not IdErr")
 	}
 
+}
+
+func IsValidLatLng_valid(t *testing.T) {
+
+	mockRepo := new(mocks.Repository)
+	driverUcase := NewDriverUsecase(mockRepo)
+	assert.True(t, driverUcase.IsValidLatLng(ValidLatLng()))
+}
+
+func IsValidLatLng_invalid(t *testing.T) {
+
+	mockRepo := new(mocks.Repository)
+	driverUcase := NewDriverUsecase(mockRepo)
+	assert.False(t, driverUcase.IsValidLatLng(InvalidLatLng()))
+	assert.False(t, driverUcase.IsValidLatLng(InvalidLatValidLng()))
+	assert.False(t, driverUcase.IsValidLatLng(ValidLatInvalidLng()))
+}
+
+func IsValidId_valid(t *testing.T) {
+	mockRepo := new(mocks.Repository)
+	driverUcase := NewDriverUsecase(mockRepo)
+	assert.True(t, driverUcase.IsValidId(ValidId()))
+}
+
+func IsValidId_invalid(t *testing.T) {
+	mockRepo := new(mocks.Repository)
+	driverUcase := NewDriverUsecase(mockRepo)
+	assert.False(t, driverUcase.IsValidId(InvalidIdUpperBound()))
+	assert.False(t, driverUcase.IsValidId(InvalidIdLowerBound()))
 }
