@@ -39,17 +39,10 @@ func NewDriverUsecase(repo driver.Repository) *DriverUsecase {
 	}
 }
 
-func (du *DriverUsecase) FindDrivers(latitude float64, longitude float64, params driver.SearchParams) (drivers []*entity.Driver, err error) {
-	var radius float64 = 500
-	var limit int8 = 10
+func (du *DriverUsecase) FindDrivers(latitude float64, longitude float64, radius float64, limit int8) (drivers []*entity.Driver, err error) {
+
 	var count int8 = 0
 	var driversFiltered []*entity.Driver
-	if params.Radius != 0 {
-		radius = params.Radius
-	}
-	if params.Limit != 0 {
-		limit = params.Limit
-	}
 	drivers, err = du.repo.GetAll()
 	for _, driver := range drivers {
 		if getMetersDistanceLatsLngs(latitude, longitude, driver.Lat, driver.Long) <= radius {
