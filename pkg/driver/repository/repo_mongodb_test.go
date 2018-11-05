@@ -16,6 +16,7 @@ func Test_DriverService(t *testing.T) {
 	t.Run("CreateDriver", createDriver_should_insert_correctly)
 	t.Run("UpdateDriver", createDriverAndUpdate_should_update_correctly)
 	t.Run("GetDriver", GetDriver_should_get_correct_driver_info)
+	t.Run("GetAllDrivers", GetAllDrivers_should_have_correct_count)
 }
 
 func CreateTestDriver1() entity.Driver {
@@ -155,7 +156,7 @@ func GetDriver_should_get_correct_driver_info(t *testing.T) {
 	}()
 }
 
-func GetDriverWithinLatLngBounds_should_get_correct_info(t *testing.T) {
+func GetAllDrivers_should_have_correct_count(t *testing.T) {
 	client, err := CreateMongoClient(mongoUrl)
 	mongoRepository := CreateMongoRepository(client, dbName)
 	driver1 := CreateTestDriver1()
@@ -164,6 +165,11 @@ func GetDriverWithinLatLngBounds_should_get_correct_info(t *testing.T) {
 	drivers := []*entity.Driver{&driver1, &driver2, &driver3}
 	err = mongoRepository.StoreMany(drivers)
 	if err != nil {
-		t.Errorf("Unable to create driver: %s", err.Error())
+		t.Errorf("Unable to create drivers: %s", err.Error())
+	}
+	results, err := mongoRepository.GetAll()
+	count := len(results)
+	if count != 3 {
+		t.Error("Incorrect number of results. Expected `1`, got: `%i`", count)
 	}
 }
