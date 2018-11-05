@@ -38,7 +38,11 @@ func UpdateDriver(driverUsecase driver.Usecase) http.Handler {
 			if _, ok := err.(*usecase.IdErr); ok {
 				writeError(&w, err, errorMessage, http.StatusNotFound)
 			}
+			if _, ok := err.(*usecase.LatLngErr); ok {
+				writeError(&w, err, errorMessage, http.StatusUnprocessableEntity)
+			}
 			return
+
 		}
 		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(d); err != nil {
