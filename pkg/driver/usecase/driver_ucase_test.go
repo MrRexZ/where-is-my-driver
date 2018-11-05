@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"github.com/stretchr/testify/assert"
+	"gojek-1st/pkg/driver"
 	"gojek-1st/pkg/driver/mocks"
 	"gojek-1st/pkg/entity"
 	"testing"
@@ -54,7 +55,7 @@ func GetDriverWithinLatLngBounds_should_get_correct_info(t *testing.T) {
 	expectedDrivers := []*entity.Driver{&driver1, &driver2}
 	mockRepo.On("GetAll").Return(allDrivers, nil)
 	driverUcase := NewDriverUsecase(mockRepo)
-	actualDrivers, err := driverUcase.FindDrivers(testLat, testLong, 1100, 10)
+	actualDrivers, err := driverUcase.FindDrivers(testLat, testLong, driver.SearchParams{Radius: 1200})
 	if err != nil {
 		t.Errorf("Unable to find drivers: %s", err.Error())
 	}

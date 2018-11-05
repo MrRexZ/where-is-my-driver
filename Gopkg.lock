@@ -185,6 +185,7 @@
     "github.com/mongodb/mongo-go-driver/bson",
     "github.com/mongodb/mongo-go-driver/mongo",
     "github.com/mongodb/mongo-go-driver/mongo/replaceopt",
+    "github.com/stretchr/testify/assert",
     "github.com/stretchr/testify/mock",
     "github.com/umahmood/haversine",
   ]
