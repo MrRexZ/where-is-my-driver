@@ -15,6 +15,10 @@ const (
 
 func Test_DriverService(t *testing.T) {
 	t.Run("GetDriverWithinLatLngBounds", GetDriverWithinLatLngBounds_should_get_correct_info)
+	t.Run("UpdateDriver_correct_latLng_correct_id", UpdateDriver_correct_latlng_correct_id)
+	t.Run("UpdateDriver_incorrect_latlng", UpdateDriver_incorrect_lat_lng)
+	t.Run("UpdateDriver_incorrect_id_0", UpdateDriver_incorrect_id_0)
+	t.Run("UpdateDriver_incorrect_id_50001", UpdateDriver_incorrect_id_50001)
 }
 
 func CreateTestDriver1() entity.Driver {
@@ -45,6 +49,33 @@ func CreateTestDriver3() entity.Driver {
 	}
 }
 
+func CreateIncorrectLatLngDriver() entity.Driver {
+	return entity.Driver{
+		Accuracy: 0.7,
+		Lat:      93.606002,
+		Long:     98.843245,
+		Id:       4,
+	}
+}
+
+func Create50001IdDriver() entity.Driver {
+	return entity.Driver{
+		Accuracy: 0.7,
+		Lat:      3.606002,
+		Long:     8.843245,
+		Id:       50001,
+	}
+}
+
+func Create0IdDriver() entity.Driver {
+	return entity.Driver{
+		Accuracy: 0.7,
+		Lat:      3.606002,
+		Long:     8.843245,
+		Id:       0,
+	}
+}
+
 func GetDriverWithinLatLngBounds_should_get_correct_info(t *testing.T) {
 
 	driver1 := CreateTestDriver1()
@@ -61,5 +92,48 @@ func GetDriverWithinLatLngBounds_should_get_correct_info(t *testing.T) {
 	}
 	assert.ElementsMatch(t, expectedDrivers, actualDrivers, "Expected drivers and the actual drivers are "+
 		"not the same!")
+
+}
+
+func UpdateDriver_correct_latlng_correct_id(t *testing.T) {
+	mockRepo := new(mocks.Repository)
+	incorrectLatLngDriver := CreateIncorrectLatLngDriver()
+	driverUcase := NewDriverUsecase(mockRepo)
+	err := driverUcase.UpdateLocation(incorrectLatLngDriver.Id, incorrectLatLngDriver.Lat, incorrectLatLngDriver.Long, incorrectLatLngDriver.Accuracy)
+	if err != nil {
+		t.Error("There is an error!")
+	}
+
+}
+
+func UpdateDriver_incorrect_lat_lng(t *testing.T) {
+	mockRepo := new(mocks.Repository)
+	incorrectLatLngDriver := CreateIncorrectLatLngDriver()
+	driverUcase := NewDriverUsecase(mockRepo)
+	err := driverUcase.UpdateLocation(incorrectLatLngDriver.Id, incorrectLatLngDriver.Lat, incorrectLatLngDriver.Long, incorrectLatLngDriver.Accuracy)
+	if _, ok := err.(*LatLngErr); !ok {
+		t.Error("Not LatLngErr")
+	}
+}
+
+func UpdateDriver_incorrect_id_50001(t *testing.T) {
+	mockRepo := new(mocks.Repository)
+	incorrectIdDriver := Create50001IdDriver()
+	driverUcase := NewDriverUsecase(mockRepo)
+	err := driverUcase.UpdateLocation(incorrectIdDriver.Id, incorrectIdDriver.Lat, incorrectIdDriver.Long, incorrectIdDriver.Accuracy)
+	if _, ok := err.(*IdErr); !ok {
+		t.Error("Not IdErr")
+	}
+
+}
+
+func UpdateDriver_incorrect_id_0(t *testing.T) {
+	mockRepo := new(mocks.Repository)
+	incorrectIdDriver := Create0IdDriver()
+	driverUcase := NewDriverUsecase(mockRepo)
+	err := driverUcase.UpdateLocation(incorrectIdDriver.Id, incorrectIdDriver.Lat, incorrectIdDriver.Long, incorrectIdDriver.Accuracy)
+	if _, ok := err.(*IdErr); !ok {
+		t.Error("Not IdErr")
+	}
 
 }
