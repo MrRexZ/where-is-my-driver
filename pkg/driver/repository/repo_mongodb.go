@@ -37,6 +37,6 @@ func (mr *MongoRepository) Store(d *entity.Driver) (int32, error) {
 	return d.Id, err
 }
 
-func (mr *MongoRepository) Get(id string) (d *entity.Driver, err error) {
+func (mr *MongoRepository) Get(id int32) (d *entity.Driver, err error) {
 	return nil, nil
 }
