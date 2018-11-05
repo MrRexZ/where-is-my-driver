@@ -2,15 +2,14 @@ package usecase
 
 import (
 	"github.com/stretchr/testify/assert"
-	"gojek-1st/pkg/driver"
 	"gojek-1st/pkg/driver/mocks"
 	"gojek-1st/pkg/entity"
 	"testing"
 )
 
 const (
-	testLat  = 3.601034
-	testLong = 98.679148
+	testLat  = 51.507351
+	testLong = -0.127758
 )
 
 func Test_DriverService(t *testing.T) {
@@ -28,8 +27,8 @@ func Test_DriverService(t *testing.T) {
 func CreateTestDriver1() entity.Driver {
 	test_driver_1 := entity.Driver{
 		Accuracy: 0.7,
-		Lat:      3.607715,
-		Long:     98.672960,
+		Lat:      51.506752,
+		Long:     -0.132912,
 		Id:       2,
 	}
 	return test_driver_1
@@ -38,8 +37,8 @@ func CreateTestDriver1() entity.Driver {
 func CreateTestDriver2() entity.Driver {
 	return entity.Driver{
 		Accuracy: 0.8,
-		Lat:      3.602576,
-		Long:     98.681196,
+		Lat:      51.508888,
+		Long:     -0.125706,
 		Id:       3,
 	}
 }
@@ -47,8 +46,8 @@ func CreateTestDriver2() entity.Driver {
 func CreateTestDriver3() entity.Driver {
 	return entity.Driver{
 		Accuracy: 0.7,
-		Lat:      3.606002,
-		Long:     98.843245,
+		Lat:      51.508034,
+		Long:     0.084315,
 		Id:       4,
 	}
 }
@@ -120,7 +119,7 @@ func GetDriverWithinLatLngBounds_should_get_correct_info(t *testing.T) {
 	expectedDrivers := []*entity.Driver{&driver1, &driver2}
 	mockRepo.On("GetAll").Return(allDrivers, nil)
 	driverUcase := NewDriverUsecase(mockRepo)
-	actualDrivers, err := driverUcase.FindDrivers(testLat, testLong, driver.SearchParams{Radius: 1200})
+	actualDrivers, err := driverUcase.FindDrivers(testLat, testLong, 1200, 10)
 	if err != nil {
 		t.Errorf("Unable to find drivers: %s", err.Error())
 	}
