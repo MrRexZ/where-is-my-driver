@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"gojek-1st/pkg/driver/mocks"
+	"gojek-1st/pkg/driver/usecase"
 	"gojek-1st/pkg/entity"
 	"net/http"
 	"net/http/httptest"
@@ -72,6 +73,28 @@ func TestUpdateDriver_validId_validLatLng(t *testing.T) {
 }
 
 func TestUpdateDriver_invalidId_validLatLng(t *testing.T) {
+
+	var dId int32 = 0
+	ucase := new(mocks.Usecase)
+	r := mux.NewRouter()
+	ucase.On("UpdateLocation", dId, mock.Anything, mock.Anything, mock.Anything).Return(dId, usecase.IdErr{})
+	MakeDriverHandlers(r, ucase)
+	path, err := r.GetRoute("updateDriver").GetPathTemplate()
+	assert.Nil(t, err)
+	assert.Equal(t, updateDriverPath, path)
+	ts := httptest.NewServer(r)
+	body := fmt.Sprintf(`{
+	"latitude": 12.971,
+	"longitude": 23.1,
+	"accuracy": 0.7
+}`)
+
+	req, err := http.NewRequest("PUT", ts.URL+"/drivers/"+strconv.Itoa(int(dId))+"/location", strings.NewReader(body))
+	rr := httptest.NewRecorder()
+	r.ServeHTTP(rr, req)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusNotFound, rr.Code)
+	defer ts.Close()
 
 }
 
