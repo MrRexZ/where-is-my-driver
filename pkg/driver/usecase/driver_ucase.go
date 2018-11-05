@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"errors"
 	"fmt"
 	"github.com/umahmood/haversine"
 	"gojek-1st/pkg/driver"
@@ -72,9 +71,16 @@ func getMetersDistanceLatsLngs(la1 float64, lo1 float64, la2 float64, lo2 float6
 
 }
 
-func (du *DriverUsecase) UpdateLocation(id int32, lat float64, long float64, accuracy float64) (err error) {
-
-	return errors.New("")
+func (du *DriverUsecase) UpdateLocation(id int32, lat float64, long float64, accuracy float64) error {
+	if !du.IsValidId(id) {
+		return &IdErr{"ID out of bound"}
+	}
+	if !du.IsValidLatLng(lat, long) {
+		return &LatLngErr{"LatLng out of bound"}
+	}
+	driver := entity.Driver{Id: id, Lat: lat, Long: long, Accuracy: accuracy}
+	_, err := du.repo.Store(&driver)
+	return err
 }
 
 func (du *DriverUsecase) IsValidLatLng(lat float64, long float64) (valid bool) {
