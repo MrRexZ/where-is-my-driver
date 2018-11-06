@@ -120,7 +120,7 @@ func TestFindDrivers_validLatlng(t *testing.T) {
 	driver2 := CreateTestDriver2()
 	expectedDrivers := []*entity.Driver{&driver1, &driver2}
 	ucase := new(mocks.Usecase)
-	ucase.On("FindDrivers", "51.507351", user_lat, user_long, mock.Anything, mock.Anything).Return(expectedDrivers, nil)
+	ucase.On("FindDrivers", user_lat, user_long, mock.Anything, mock.Anything).Return(expectedDrivers, nil)
 
 	r := mux.NewRouter()
 	MakeDriverHandlers(r, ucase)
@@ -140,5 +140,22 @@ func TestFindDrivers_validLatlng(t *testing.T) {
 }
 
 func TestFindDrivers_invalidLatLng(t *testing.T) {
+	user_lat := "151.507351"
+	user_long := "91.127758"
+	driver1 := CreateTestDriver1()
+	driver2 := CreateTestDriver2()
+	expectedDrivers := []*entity.Driver{&driver1, &driver2}
+	ucase := new(mocks.Usecase)
+	ucase.On("FindDrivers", user_lat, user_long, mock.Anything, mock.Anything).Return(expectedDrivers, nil)
 
+	r := mux.NewRouter()
+	MakeDriverHandlers(r, ucase)
+	ts := httptest.NewServer(r)
+	defer ts.Close()
+
+	url, err := r.Get("findDrivers").URL("latitude", user_lat, "longitude", user_long)
+	assert.NoError(t, err)
+	res, err := http.Get(ts.URL + url.String())
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusUnprocessableEntity, res.StatusCode)
 }
