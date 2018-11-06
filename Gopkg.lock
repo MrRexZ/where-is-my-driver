@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  branch = "master"
+  digest = "1:cc439e1d9d8cff3d575642f5401033b00f2b8d0cd9f859db45604701c990879a"
+  name = "github.com/corpix/uarand"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "2b8494104d86337cdd41d0a49cbed8e4583c0ab4"
+
+[[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
@@ -40,6 +48,14 @@
   pruneopts = "UT"
   revision = "e3702bed27f0d39777b0b37b664b6280e8ef8fbf"
   version = "v1.6.2"
+
+[[projects]]
+  branch = "master"
+  digest = "1:22725c01ecd8ed0c0f0078944305a57053340d92878b02db925c660cc4accf64"
+  name = "github.com/icrowley/fake"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "4178557ae428460c3780a381c824a1f3aceb6325"
 
 [[projects]]
   digest = "1:e3492bfc9acbe6e04b51fe36220f9aea8c919885632f0de55685db80c0029844"
@@ -198,7 +214,9 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/gorilla/context",
     "github.com/gorilla/mux",
+    "github.com/icrowley/fake",
     "github.com/mongodb/mongo-go-driver/bson",
     "github.com/mongodb/mongo-go-driver/mongo",
     "github.com/mongodb/mongo-go-driver/mongo/replaceopt",
