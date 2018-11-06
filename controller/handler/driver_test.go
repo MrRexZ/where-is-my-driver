@@ -114,8 +114,11 @@ func TestUpdateDriver_validId_invalidLatLng(t *testing.T) {
 }
 
 func TestFindDrivers_validLatlng(t *testing.T) {
-	user_lat := "51.507351"
-	user_long := "-0.127758"
+
+	user_lat_str := "51.507351"
+	user_long_str := "-0.127758"
+	user_lat, _ := strconv.ParseFloat(user_lat_str, 64)
+	user_long, _ := strconv.ParseFloat(user_long_str, 64)
 	driver1 := CreateTestDriver1()
 	driver2 := CreateTestDriver2()
 	expectedDrivers := []*entity.Driver{&driver1, &driver2}
@@ -130,7 +133,7 @@ func TestFindDrivers_validLatlng(t *testing.T) {
 	ts := httptest.NewServer(r)
 	defer ts.Close()
 
-	url, err := r.Get("findDrivers").URL("latitude", user_lat, "longitude", user_long)
+	url, err := r.Get("findDrivers").URL("latitude", user_lat_str, "longitude", user_long_str)
 	res, err := http.Get(ts.URL + url.String())
 	assert.NoError(t, err)
 	var actualDrivers []*entity.Driver
@@ -140,8 +143,10 @@ func TestFindDrivers_validLatlng(t *testing.T) {
 }
 
 func TestFindDrivers_invalidLatLng(t *testing.T) {
-	user_lat := "151.507351"
-	user_long := "91.127758"
+	user_lat_str := "51.507351"
+	user_long_str := "-0.127758"
+	user_lat, _ := strconv.ParseFloat(user_lat_str, 64)
+	user_long, _ := strconv.ParseFloat(user_long_str, 64)
 	driver1 := CreateTestDriver1()
 	driver2 := CreateTestDriver2()
 	expectedDrivers := []*entity.Driver{&driver1, &driver2}
@@ -153,7 +158,7 @@ func TestFindDrivers_invalidLatLng(t *testing.T) {
 	ts := httptest.NewServer(r)
 	defer ts.Close()
 
-	url, err := r.Get("findDrivers").URL("latitude", user_lat, "longitude", user_long)
+	url, err := r.Get("findDrivers").URL("latitude", user_lat_str, "longitude", user_long_str)
 	assert.NoError(t, err)
 	res, err := http.Get(ts.URL + url.String())
 	assert.NoError(t, err)
