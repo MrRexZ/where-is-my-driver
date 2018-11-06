@@ -143,15 +143,12 @@ func TestFindDrivers_validLatlng(t *testing.T) {
 }
 
 func TestFindDrivers_invalidLatLng(t *testing.T) {
-	user_lat_str := "51.507351"
-	user_long_str := "-0.127758"
+	user_lat_str := "91.507351"
+	user_long_str := "91.127758"
 	user_lat, _ := strconv.ParseFloat(user_lat_str, 64)
 	user_long, _ := strconv.ParseFloat(user_long_str, 64)
-	driver1 := CreateTestDriver1()
-	driver2 := CreateTestDriver2()
-	expectedDrivers := []*entity.Driver{&driver1, &driver2}
 	ucase := new(mocks.Usecase)
-	ucase.On("FindDrivers", user_lat, user_long, mock.Anything, mock.Anything).Return(expectedDrivers, nil)
+	ucase.On("FindDrivers", user_lat, user_long, mock.Anything, mock.Anything).Return(nil, &usecase.LatLngErr{"LatLng err"})
 
 	r := mux.NewRouter()
 	MakeDriverHandlers(r, ucase)
