@@ -40,6 +40,9 @@ func NewDriverUsecase(repo driver.Repository) *DriverUsecase {
 }
 
 func (du *DriverUsecase) FindDrivers(latitude float64, longitude float64, radius float64, limit int8) (drivers []*entity.Driver, err error) {
+	if !du.IsValidLatLng(latitude, longitude) {
+		return nil, &LatLngErr{"LatLng should be between +/-90"}
+	}
 
 	var count int8 = 0
 	var driversFiltered []*entity.Driver
