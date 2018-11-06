@@ -63,7 +63,3 @@ func (mr *MongoRepository) GetAll() (ds []*entity.Driver, err error) {
 	}
 	return drivers, err
 }
-
-func (mr *MongoRepository) GetWithinLatLng(lat float64, long float64, dist float64) ([]*entity.Driver, error) {
-	return nil, nil
-}

@@ -98,12 +98,11 @@ func FindDrivers(driverUsecase driver.Usecase) http.Handler {
 			}
 		}
 
+		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(drivers); err != nil {
 			writeError(&w, err, errorTag, http.StatusInternalServerError)
 			return
 		}
-
-		w.WriteHeader(http.StatusOK)
 
 	})
 }
