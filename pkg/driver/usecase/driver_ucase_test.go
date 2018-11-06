@@ -95,7 +95,7 @@ func ValidLatLng() (lat float64, long float64) {
 }
 
 func ValidLatInvalidLng() (lat float64, long float64) {
-	return 89, 91
+	return 89, 191
 }
 
 func InvalidLatValidLng() (lat float64, long float64) {
@@ -103,7 +103,7 @@ func InvalidLatValidLng() (lat float64, long float64) {
 }
 
 func InvalidLatLng() (lat float64, long float64) {
-	return 91, -91
+	return 91, 191
 }
 
 func ValidId() (id int32) {
@@ -145,10 +145,7 @@ func updateDriver_correctLatlngCorrectId(t *testing.T) {
 	mockRepo.On("Store", &correctLatLngDriver).Return(correctLatLngDriver.Id, nil)
 	driverUcase := NewDriverUsecase(mockRepo)
 	_, err := driverUcase.UpdateLocation(correctLatLngDriver.Id, correctLatLngDriver.Lat, correctLatLngDriver.Long, correctLatLngDriver.Accuracy)
-	if err != nil {
-		t.Error("There is an error!")
-	}
-
+	assert.Nil(t, err)
 }
 
 func updateDriverIncorrectLatLng(t *testing.T) {
@@ -156,9 +153,8 @@ func updateDriverIncorrectLatLng(t *testing.T) {
 	incorrectLatLngDriver := CreateIncorrectLatLngDriver()
 	driverUcase := NewDriverUsecase(mockRepo)
 	_, err := driverUcase.UpdateLocation(incorrectLatLngDriver.Id, incorrectLatLngDriver.Lat, incorrectLatLngDriver.Long, incorrectLatLngDriver.Accuracy)
-	if _, ok := err.(*LatLngErr); !ok {
-		t.Error("Not LatLngErr")
-	}
+	_, ok := err.(*LatLngErr)
+	assert.True(t, ok)
 }
 
 func updateDriver_incorrectIdUpperbound(t *testing.T) {
@@ -185,16 +181,25 @@ func isValidLatLng_valid(t *testing.T) {
 
 	mockRepo := new(mocks.Repository)
 	driverUcase := NewDriverUsecase(mockRepo)
-	assert.True(t, driverUcase.IsValidLatLng(ValidLatLng()))
+	isValid, err := driverUcase.IsValidLatLng(ValidLatLng())
+	assert.True(t, isValid)
+	assert.NoError(t, err)
 }
 
 func isValidLatLng_invalid(t *testing.T) {
 
 	mockRepo := new(mocks.Repository)
 	driverUcase := NewDriverUsecase(mockRepo)
-	assert.False(t, driverUcase.IsValidLatLng(InvalidLatLng()))
-	assert.False(t, driverUcase.IsValidLatLng(InvalidLatValidLng()))
-	assert.False(t, driverUcase.IsValidLatLng(ValidLatInvalidLng()))
+	isValid, err := driverUcase.IsValidLatLng(InvalidLatLng())
+	assert.False(t, isValid)
+	assert.NotNil(t, err)
+	isValid, err = driverUcase.IsValidLatLng(InvalidLatValidLng())
+	assert.False(t, isValid)
+	assert.NotNil(t, err)
+
+	isValid, err = driverUcase.IsValidLatLng(ValidLatInvalidLng())
+	assert.False(t, isValid)
+	assert.NotNil(t, err)
 }
 
 func isValidId_valid(t *testing.T) {

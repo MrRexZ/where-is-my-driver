@@ -40,8 +40,8 @@ func NewDriverUsecase(repo driver.Repository) *DriverUsecase {
 }
 
 func (du *DriverUsecase) FindDrivers(latitude float64, longitude float64, radius float64, limit int8) (drivers []*entity.Driver, err error) {
-	if !du.IsValidLatLng(latitude, longitude) {
-		return nil, &LatLngErr{"LatLng should be between +/-90"}
+	if isValid, err := du.IsValidLatLng(latitude, longitude); !isValid {
+		return nil, err
 	}
 
 	var count int8 = 0
@@ -71,19 +71,22 @@ func (du *DriverUsecase) UpdateLocation(id int32, lat float64, long float64, acc
 	if !du.IsValidId(id) {
 		return 0, &IdErr{"ID out of bound"}
 	}
-	if !du.IsValidLatLng(lat, long) {
-		return 0, &LatLngErr{"LatLng should be between +/-90"}
+	if isValid, err := du.IsValidLatLng(lat, long); !isValid {
+		return 0, err
 	}
 	driver := entity.Driver{Id: id, Lat: lat, Long: long, Accuracy: accuracy}
 	id, err := du.repo.Store(&driver)
 	return id, err
 }
 
-func (du *DriverUsecase) IsValidLatLng(lat float64, long float64) (valid bool) {
-	if math.Abs(lat) > 90 || math.Abs(long) > 90 {
-		return false
+func (du *DriverUsecase) IsValidLatLng(lat float64, long float64) (valid bool, err error) {
+	if math.Abs(lat) > 90 {
+		return false, &LatLngErr{"Latitude should be between +/- 90"}
 	}
-	return true
+	if math.Abs(long) > 180 {
+		return false, &LatLngErr{"Longitude should be between +/- 180"}
+	}
+	return true, nil
 }
 
 func (du *DriverUsecase) IsValidId(id int32) (valid bool) {
