@@ -14,6 +14,7 @@ const (
 
 func Test_DriverService(t *testing.T) {
 	t.Run("GetDriverWithinLatLngBounds", GetDriverWithinLatLngBounds_should_get_correct_info)
+	t.Run("GetDriver_invalidLatLng", GetDriver_invalidLatLng)
 	t.Run("IsValidLatLng_valid", IsValidLatLng_valid)
 	t.Run("IsValidLatLng_invalid", IsValidLatLng_invalid)
 	t.Run("IsValidId_valid", IsValidId_valid)
@@ -126,6 +127,16 @@ func GetDriverWithinLatLngBounds_should_get_correct_info(t *testing.T) {
 	assert.ElementsMatch(t, expectedDrivers, actualDrivers, "Expected drivers and the actual drivers are "+
 		"not the same!")
 
+}
+
+func GetDriver_invalidLatLng(t *testing.T) {
+	invLat, invLong := InvalidLatLng()
+	mockRepo := new(mocks.Repository)
+	correctIdDriver := CreateValidDriver()
+	driverUcase := NewDriverUsecase(mockRepo)
+	_, err := driverUcase.UpdateLocation(correctIdDriver.Id, invLat, invLong, correctIdDriver.Accuracy)
+	_, ok := err.(*LatLngErr)
+	assert.True(t, ok)
 }
 
 func UpdateDriver_correct_latlng_correct_id(t *testing.T) {
