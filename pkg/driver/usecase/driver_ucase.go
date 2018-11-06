@@ -75,8 +75,8 @@ func (du *DriverUsecase) UpdateLocation(id int32, lat float64, long float64, acc
 		return 0, err
 	}
 	driver := entity.Driver{Id: id, Lat: lat, Long: long, Accuracy: accuracy}
-	id, err := du.repo.Store(&driver)
-	return id, err
+	go du.repo.Store(&driver)
+	return id, nil
 }
 
 func (du *DriverUsecase) IsValidLatLng(lat float64, long float64) (valid bool, err error) {

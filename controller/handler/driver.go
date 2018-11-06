@@ -47,6 +47,7 @@ func UpdateDriver(driverUsecase driver.Usecase) http.Handler {
 			}
 
 		}
+
 		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(d); err != nil {
 			writeError(&w, err, errorMessage, http.StatusInternalServerError)
