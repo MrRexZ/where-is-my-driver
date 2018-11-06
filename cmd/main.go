@@ -15,12 +15,18 @@ import (
 )
 
 func StartServer() {
-	mongoClient, err := repository.CreateMongoClient(config.MONGODB_HOST)
+	readClient, err := repository.CreateMongoClient(config.MONGODB_HOST)
+
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	mongoRepo := repository.CreateMongoRepository(mongoClient, config.MONGODB_DB_NAME)
+	writeClient, err := repository.CreateMongoClient(config.MONGODB_HOST)
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	mongoRepo := repository.CreateMongoRepository(readClient, writeClient, config.MONGODB_DB_NAME)
 	driverUCase := usecase.NewDriverUsecase(mongoRepo)
 	r := mux.NewRouter()
 	handler.MakeDriverHandlers(r, driverUCase)

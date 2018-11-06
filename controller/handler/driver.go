@@ -89,7 +89,9 @@ func FindDrivers(driverUsecase driver.Usecase) http.Handler {
 			radius, err = strconv.ParseFloat(radius_str, 64)
 		}
 
+		log.Println("About to find drivers from service & DB")
 		drivers, err := driverUsecase.FindDrivers(latitude, longitude, radius, limit)
+		log.Println("DB find drivers call finish")
 
 		if err != nil {
 			if _, ok := err.(*usecase.LatLngErr); ok {

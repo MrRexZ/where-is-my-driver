@@ -14,21 +14,21 @@ const (
 )
 
 type MongoRepository struct {
-	client     *mongo.Client
-	db         string
-	collection *mongo.Collection
+	readClient  *mongo.Client
+	writeClient *mongo.Client
+	db          string
 }
 
-func NewMongoRepository(client *mongo.Client, db string) *MongoRepository {
+func NewMongoRepository(readClient *mongo.Client, writeClient *mongo.Client, db string) *MongoRepository {
 	return &MongoRepository{
-		client:     client,
-		db:         db,
-		collection: client.Database(db).Collection(collectionName),
+		readClient:  readClient,
+		writeClient: writeClient,
+		db:          db,
 	}
 }
 
 func (mr *MongoRepository) Store(d *entity.Driver) (int32, error) {
-	_, err := mr.collection.ReplaceOne(nil, bson.NewDocument(
+	_, err := mr.writeClient.Database(mr.db).Collection(collectionName).ReplaceOne(nil, bson.NewDocument(
 		bson.EC.Int32("id", d.Id),
 	), d, replaceopt.Upsert(true))
 	if err != nil {
@@ -47,14 +47,14 @@ func (mr *MongoRepository) StoreMany(ds []*entity.Driver) error {
 
 func (mr *MongoRepository) Get(id int32) (d *entity.Driver, err error) {
 	driver := entity.Driver{}
-	doc_res := mr.collection.FindOne(nil,
+	doc_res := mr.readClient.Database(mr.db).Collection(collectionName).FindOne(nil,
 		bson.NewDocument(bson.EC.Int32("id", id)))
 	doc_res.Decode(&driver)
 	return &driver, err
 }
 
 func (mr *MongoRepository) GetAll() (ds []*entity.Driver, err error) {
-	cursor, err := mr.collection.Find(nil, nil)
+	cursor, err := mr.readClient.Database(mr.db).Collection(collectionName).Find(nil, nil)
 	var drivers []*entity.Driver
 	for cursor.Next(context.Background()) {
 		driver := entity.Driver{}

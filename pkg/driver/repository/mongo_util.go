@@ -19,8 +19,8 @@ func CreateMongoClient(mongoUrl string) (*mongo.Client, error) {
 	return client, err
 }
 
-func CreateMongoRepository(client *mongo.Client, dbName string) *MongoRepository {
-	mongoRepository := NewMongoRepository(client, dbName)
+func CreateMongoRepository(readClient *mongo.Client, writeClient *mongo.Client, dbName string) *MongoRepository {
+	mongoRepository := NewMongoRepository(readClient, writeClient, dbName)
 	return mongoRepository
 }
 
