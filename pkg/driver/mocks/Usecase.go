@@ -34,19 +34,28 @@ func (_m *Usecase) FindDrivers(latitude float64, longitude float64, radius float
 }
 
 // IsValidId provides a mock function with given fields: id
-func (_m *Usecase) IsValidId(id int32) {
-	_m.Called(id)
+func (_m *Usecase) IsValidId(id int32) bool {
+	ret := _m.Called(id)
+
+	var r0 bool
+	if rf, ok := ret.Get(0).(func(int32) bool); ok {
+		r0 = rf(id)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	return r0
 }
 
 // IsValidLatLng provides a mock function with given fields: latitude, longitude
-func (_m *Usecase) IsValidLatLng(latitude float64, longitude float64) error {
+func (_m *Usecase) IsValidLatLng(latitude float64, longitude float64) bool {
 	ret := _m.Called(latitude, longitude)
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(float64, float64) error); ok {
+	var r0 bool
+	if rf, ok := ret.Get(0).(func(float64, float64) bool); ok {
 		r0 = rf(latitude, longitude)
 	} else {
-		r0 = ret.Error(0)
+		r0 = ret.Get(0).(bool)
 	}
 
 	return r0

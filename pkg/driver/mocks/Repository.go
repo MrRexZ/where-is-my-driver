@@ -11,11 +11,11 @@ type Repository struct {
 }
 
 // Get provides a mock function with given fields: id
-func (_m *Repository) Get(id string) (*entity.Driver, error) {
+func (_m *Repository) Get(id int32) (*entity.Driver, error) {
 	ret := _m.Called(id)
 
 	var r0 *entity.Driver
-	if rf, ok := ret.Get(0).(func(string) *entity.Driver); ok {
+	if rf, ok := ret.Get(0).(func(int32) *entity.Driver); ok {
 		r0 = rf(id)
 	} else {
 		if ret.Get(0) != nil {
@@ -24,7 +24,7 @@ func (_m *Repository) Get(id string) (*entity.Driver, error) {
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string) error); ok {
+	if rf, ok := ret.Get(1).(func(int32) error); ok {
 		r1 = rf(id)
 	} else {
 		r1 = ret.Error(1)
