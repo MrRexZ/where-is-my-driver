@@ -58,9 +58,10 @@ func CreateTestDriver3() entity.Driver {
 }
 
 func createDriver_shouldInsertCorrectly(t *testing.T) {
-	client, err := CreateMongoClient(mongoUrl)
-	mongoRepository := CreateMongoRepository(client, dbName)
-	DropDatabase(client, dbName)
+	readClient, err := CreateMongoClient(mongoUrl)
+	writeClient, err := CreateMongoClient(mongoUrl)
+	mongoRepository := CreateMongoRepository(readClient, writeClient, dbName)
+	DropDatabase(readClient, dbName)
 	driver := CreateTestDriver1()
 
 	_, err = mongoRepository.Store(&driver)
@@ -69,7 +70,7 @@ func createDriver_shouldInsertCorrectly(t *testing.T) {
 		t.Errorf("Unable to create driver: %s", err.Error())
 	}
 	var results []entity.Driver
-	cursor, err := client.Database(dbName).Collection(collectionName).Find(context.Background(), nil)
+	cursor, err := readClient.Database(dbName).Collection(collectionName).Find(context.Background(), nil)
 
 	for cursor.Next(context.Background()) {
 		driver := entity.Driver{}
@@ -89,13 +90,14 @@ func createDriver_shouldInsertCorrectly(t *testing.T) {
 	}
 
 	defer func() {
-		DropDatabase(client, dbName)
+		DropDatabase(writeClient, dbName)
 	}()
 }
 
 func createDriverAndUpdate_ShouldUpdateCorrectly(t *testing.T) {
-	client, err := CreateMongoClient(mongoUrl)
-	mongoRepository := CreateMongoRepository(client, dbName)
+	readClient, err := CreateMongoClient(mongoUrl)
+	writeClient, err := CreateMongoClient(mongoUrl)
+	mongoRepository := CreateMongoRepository(readClient, writeClient, dbName)
 	driver := CreateTestDriver1()
 	updatedDriver := UpdatedTestDriver1()
 
@@ -106,7 +108,7 @@ func createDriverAndUpdate_ShouldUpdateCorrectly(t *testing.T) {
 		t.Errorf("Unable to create driver: %s", err.Error())
 	}
 	var results []entity.Driver
-	cursor, err := client.Database(dbName).Collection(collectionName).Find(context.Background(), nil)
+	cursor, err := writeClient.Database(dbName).Collection(collectionName).Find(context.Background(), nil)
 
 	for cursor.Next(context.Background()) {
 		driver := entity.Driver{}
@@ -129,13 +131,14 @@ func createDriverAndUpdate_ShouldUpdateCorrectly(t *testing.T) {
 	}
 
 	defer func() {
-		DropDatabase(client, dbName)
+		DropDatabase(writeClient, dbName)
 	}()
 }
 
 func getDriver_shouldGetCorrectDriverInfo(t *testing.T) {
-	client, err := CreateMongoClient(mongoUrl)
-	mongoRepository := CreateMongoRepository(client, dbName)
+	readClient, err := CreateMongoClient(mongoUrl)
+	writeClient, err := CreateMongoClient(mongoUrl)
+	mongoRepository := CreateMongoRepository(readClient, writeClient, dbName)
 	driver := CreateTestDriver1()
 
 	_, err = mongoRepository.Store(&driver)
@@ -153,13 +156,14 @@ func getDriver_shouldGetCorrectDriverInfo(t *testing.T) {
 	}
 
 	defer func() {
-		DropDatabase(client, dbName)
+		DropDatabase(readClient, dbName)
 	}()
 }
 
 func getAllDrivers_shouldHaveCorrectCount(t *testing.T) {
-	client, err := CreateMongoClient(mongoUrl)
-	mongoRepository := CreateMongoRepository(client, dbName)
+	readClient, err := CreateMongoClient(mongoUrl)
+	writeClient, err := CreateMongoClient(mongoUrl)
+	mongoRepository := CreateMongoRepository(readClient, writeClient, dbName)
 	driver1 := CreateTestDriver1()
 	driver2 := CreateTestDriver2()
 	driver3 := CreateTestDriver3()
