@@ -101,15 +101,15 @@ func TestUpdateDriver_validId_invalidLatLng(t *testing.T) {
 	var dId int32 = 1
 	ucase := new(mocks.Usecase)
 	r := mux.NewRouter()
-	ucase.On("UpdateLocation", dId, mock.Anything, mock.Anything, mock.Anything).Return(dId, &usecase.LatLngErr{"Latitude should be between +/- 90"})
+	ucase.On("UpdateLocation", dId, 92.971, 13.1, mock.Anything).Return(dId, &usecase.LatLngErr{"Latitude should be between +/- 90"})
 	MakeDriverHandlers(r, ucase)
 	path, err := r.GetRoute("updateDriver").GetPathTemplate()
 	assert.Nil(t, err)
 	assert.Equal(t, updateDriverPath, path)
 	ts := httptest.NewServer(r)
 	body := fmt.Sprintf(`{
-	"latitude": 12.971,
-	"longitude": 23.1,
+	"latitude": 92.971,
+	"longitude": 13.1,
 	"accuracy": 0.7
 }`)
 
