@@ -12,11 +12,11 @@ const (
 	dbName   = "test_db"
 )
 
-func Test_DriverService(t *testing.T) {
-	t.Run("CreateDriver", createDriver_should_insert_correctly)
-	t.Run("UpdateDriver", createDriverAndUpdate_should_update_correctly)
-	t.Run("GetDriver", GetDriver_should_get_correct_driver_info)
-	t.Run("GetAllDrivers", GetAllDrivers_should_have_correct_count)
+func TestDriverRepo(t *testing.T) {
+	t.Run("CreateDriver", createDriver_shouldInsertCorrectly)
+	t.Run("UpdateDriver", createDriverAndUpdate_ShouldUpdateCorrectly)
+	t.Run("GetDriver", getDriver_shouldGetCorrectDriverInfo)
+	t.Run("GetAllDrivers", getAllDrivers_shouldHaveCorrectCount)
 }
 
 func CreateTestDriver1() entity.Driver {
@@ -57,9 +57,10 @@ func CreateTestDriver3() entity.Driver {
 	}
 }
 
-func createDriver_should_insert_correctly(t *testing.T) {
+func createDriver_shouldInsertCorrectly(t *testing.T) {
 	client, err := CreateMongoClient(mongoUrl)
 	mongoRepository := CreateMongoRepository(client, dbName)
+	DropDatabase(client, dbName)
 	driver := CreateTestDriver1()
 
 	_, err = mongoRepository.Store(&driver)
@@ -92,7 +93,7 @@ func createDriver_should_insert_correctly(t *testing.T) {
 	}()
 }
 
-func createDriverAndUpdate_should_update_correctly(t *testing.T) {
+func createDriverAndUpdate_ShouldUpdateCorrectly(t *testing.T) {
 	client, err := CreateMongoClient(mongoUrl)
 	mongoRepository := CreateMongoRepository(client, dbName)
 	driver := CreateTestDriver1()
@@ -132,7 +133,7 @@ func createDriverAndUpdate_should_update_correctly(t *testing.T) {
 	}()
 }
 
-func GetDriver_should_get_correct_driver_info(t *testing.T) {
+func getDriver_shouldGetCorrectDriverInfo(t *testing.T) {
 	client, err := CreateMongoClient(mongoUrl)
 	mongoRepository := CreateMongoRepository(client, dbName)
 	driver := CreateTestDriver1()
@@ -156,7 +157,7 @@ func GetDriver_should_get_correct_driver_info(t *testing.T) {
 	}()
 }
 
-func GetAllDrivers_should_have_correct_count(t *testing.T) {
+func getAllDrivers_shouldHaveCorrectCount(t *testing.T) {
 	client, err := CreateMongoClient(mongoUrl)
 	mongoRepository := CreateMongoRepository(client, dbName)
 	driver1 := CreateTestDriver1()
