@@ -14,8 +14,8 @@ import (
 	"time"
 )
 
-func main() {
-	mongoClient, err := repository.CreateMongoClient()
+func StartServer() {
+	mongoClient, err := repository.CreateMongoClient(config.MONGODB_HOST)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
