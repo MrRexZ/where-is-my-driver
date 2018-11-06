@@ -25,11 +25,13 @@ func UpdateDriver(driverUsecase driver.Usecase) http.Handler {
 		err := json.NewDecoder(r.Body).Decode(&d)
 		if err != nil {
 			writeError(&w, err, errorMessage, http.StatusInternalServerError)
+			return
 		}
 		id, err := strconv.ParseInt(vars["id"], 10, 32)
 		d.Id = int32(id)
 		if err != nil {
 			writeError(&w, err, errorMessage, http.StatusInternalServerError)
+			return
 		}
 
 		d.Id, err = driverUsecase.UpdateLocation(d.Id, d.Lat, d.Long, d.Accuracy)
@@ -37,11 +39,12 @@ func UpdateDriver(driverUsecase driver.Usecase) http.Handler {
 		if err != nil {
 			if _, ok := err.(*usecase.IdErr); ok {
 				writeError(&w, err, errorMessage, http.StatusNotFound)
+				return
 			}
 			if _, ok := err.(*usecase.LatLngErr); ok {
 				writeError(&w, err, errorMessage, http.StatusUnprocessableEntity)
+				return
 			}
-			return
 
 		}
 		w.WriteHeader(http.StatusOK)
@@ -58,11 +61,49 @@ func writeError(w *http.ResponseWriter, error error, errorTag string, status int
 	log.Println(error.Error())
 	writer.WriteHeader(status)
 	writer.Write([]byte(errorTag))
-	return
 }
 
 func FindDrivers(driverUsecase driver.Usecase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		errorTag := "Error finding drivers"
+		queryParams := r.URL.Query()
+
+		latitude, err := strconv.ParseFloat(queryParams.Get("latitude"), 64)
+		longitude, err := strconv.ParseFloat(queryParams.Get("longitude"), 64)
+		limit_str := queryParams.Get("limit")
+		radius_str := queryParams.Get("radius")
+
+		var limit int8 = 10
+		var radius float64 = 500
+
+		if len(limit_str) > 0 {
+			limit_int64, err := strconv.ParseInt(limit_str, 10, 8)
+			if err != nil {
+				writeError(&w, err, errorTag, http.StatusInternalServerError)
+				return
+			}
+			limit = int8(int(limit_int64))
+		}
+		if len(radius_str) > 0 {
+			radius, err = strconv.ParseFloat(radius_str, 64)
+		}
+
+		drivers, err := driverUsecase.FindDrivers(latitude, longitude, radius, limit)
+
+		if err != nil {
+			if _, ok := err.(*usecase.LatLngErr); ok {
+				writeError(&w, err, errorTag, http.StatusUnprocessableEntity)
+				return
+			}
+		}
+
+		if err := json.NewEncoder(w).Encode(drivers); err != nil {
+			writeError(&w, err, errorTag, http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+
 	})
 }
 
