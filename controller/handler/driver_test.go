@@ -16,6 +16,14 @@ import (
 	"testing"
 )
 
+func TestDriverHandler(t *testing.T) {
+	t.Run("TestUpdateDriver_validId_validLatLng", TestUpdateDriver_validId_validLatLng)
+	t.Run("TestUpdateDriver_invalidId_validLatLng", TestUpdateDriver_invalidId_validLatLng)
+	t.Run("TestUpdateDriver_validId_invalidLatLng", TestUpdateDriver_validId_invalidLatLng)
+	t.Run("TestFindDrivers_validLatlng", TestFindDrivers_validLatlng)
+	t.Run("TestFindDrivers_invalidLatLng", TestFindDrivers_invalidLatLng)
+}
+
 func CreateTestDriver1() entity.Driver {
 	test_driver_1 := entity.Driver{
 		Accuracy: 0.7,
