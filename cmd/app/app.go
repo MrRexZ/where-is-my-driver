@@ -10,23 +10,23 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"time"
 )
 
 func StartServer() {
-	readClient, err := repository.CreateMongoClient(config.MONGODB_HOST)
+	mongoCfg := config.GetConfig().MongoCfg
+	readClient, err := repository.CreateMongoClient(mongoCfg.HostName)
 
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	writeClient, err := repository.CreateMongoClient(config.MONGODB_HOST)
+	writeClient, err := repository.CreateMongoClient(mongoCfg.HostName)
 
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	mongoRepo := repository.CreateMongoRepository(readClient, writeClient, config.MONGODB_DB_NAME)
+	mongoRepo := repository.CreateMongoRepository(readClient, writeClient, mongoCfg.DbName)
 	driverUCase := usecase.NewDriverUsecase(mongoRepo)
 	r := mux.NewRouter()
 	handler.MakeDriverHandlers(r, driverUCase)
@@ -36,7 +36,7 @@ func StartServer() {
 	srv := &http.Server{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
-		Addr:         ":" + strconv.Itoa(config.REST_API_PORT),
+		Addr:         ":" + config.GetConfig().ServerCfg.Port,
 		Handler:      context.ClearHandler(http.DefaultServeMux),
 		ErrorLog:     logger,
 	}

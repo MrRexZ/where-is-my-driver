@@ -33,9 +33,10 @@ func generate50000Drivers() {
 
 func updateDriver(client *http.Client, driver entity.Driver) {
 	dId := driver.Id
+	serverCfg := config.GetConfig().ServerCfg
 	driverBody := map[string]float64{"latitude": driver.Lat, "longitude": driver.Long, "accuracy": driver.Accuracy}
 	driverJsonMarshalled, _ := json.Marshal(driverBody)
-	req, err := http.NewRequest("PUT", config.HOST+":"+strconv.Itoa(config.REST_API_PORT)+"/drivers/"+strconv.Itoa(int(dId))+"/location", strings.NewReader(string(driverJsonMarshalled)))
+	req, err := http.NewRequest("PUT", serverCfg.HostName+":"+serverCfg.Port+"/drivers/"+strconv.Itoa(int(dId))+"/location", strings.NewReader(string(driverJsonMarshalled)))
 
 	resp, err := client.Do(req)
 	if err != nil {
