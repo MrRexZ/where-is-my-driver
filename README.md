@@ -41,7 +41,8 @@ Inside `driver` folder:
 - `repository` contains code for DB 
 - `usecase` contains domain rules, business logic, and serves as an interface between network handler and database.
 
-The `config` folder contains config-specific info
+The `config` folder contains config-specific info.
+Refer `config_const` for list of environment variables you can make use of to export a production/dev profile
 
 ## 2. Tech Stack
 
@@ -92,6 +93,7 @@ Relationship between my project structure and the architecture:
 
 
 ### 6.1. Starting the server and simulator (generating 50000 drivers info per minute)
+
 With Docker (Linux) :
 1. Navigate to the root of the project.
 2. In terminal, enter `docker-compose build` for building the image.
