@@ -89,5 +89,20 @@ Relationship between my project structure and the architecture:
 ## 6.Instructions
 
 
+### 6.1. Starting the server and simulator (generating 50000 drivers info per minute)
+With Docker (Linux) :
+1. Navigate to the root of the project.
+2. In terminal, enter `docker-compose build` for building the image.
+App can be started by the command `docker-compose up`.
+
+Without Docker :
+Go to `/cmd` folder and run `go run main.go` in terminal.
+
+
+
+
+### 6.2. Accessing the service
+Use web browser or API tools such as Postman to make calls to `http://localhost:8080` with the correct path.
+
 
 
