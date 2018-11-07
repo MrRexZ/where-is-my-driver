@@ -39,6 +39,7 @@ Inside `driver` folder:
 - `repository` contains code for DB 
 - `usecase` contains domain rules, business logic, and serves as an interface between network handler and database.
 
+The `config` folder contains config-specific info
 
 ## 2. Tech Stack
 
