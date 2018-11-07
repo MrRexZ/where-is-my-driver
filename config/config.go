@@ -20,11 +20,11 @@ type MongoDBCfg struct {
 func GetConfig() *Config {
 	return &Config{
 		ServerCfg: &ServerCfg{
-			HostName: envValElseDefault("gojek_1st:server:hostname", "http://localhost"),
-			Port:     envValElseDefault("gojek_1st:server:port", "8080")},
+			HostName: envValElseDefault(SERVER_HOST_ENV_KEY, "http://localhost"),
+			Port:     envValElseDefault(SERVER_PORT_ENV_KEY, "8080")},
 		MongoCfg: &MongoDBCfg{
-			HostName: envValElseDefault("gojek_1st:mongo:hostname", "mongodb://mongo:27017"),
-			DbName:   envValElseDefault("gojek_1st:mongo:dbname", "gojek-db")},
+			HostName: envValElseDefault(MONGO_HOST_ENV_KEY, "mongodb://mongo:27017"),
+			DbName:   envValElseDefault(MONGO_DB_ENV_KEY, "gojek-db")},
 	}
 
 }
