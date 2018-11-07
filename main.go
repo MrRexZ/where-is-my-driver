@@ -43,6 +43,7 @@ func updateDriver(client *http.Client, driver entity.Driver) {
 	}
 	var decodedDriver entity.Driver
 	json.NewDecoder(resp.Body).Decode(&decodedDriver)
+	log.Printf("Driver ID %d updated.\n ", decodedDriver.Id)
 	defer resp.Body.Close()
 
 }
