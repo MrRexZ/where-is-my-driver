@@ -21,10 +21,20 @@ A web server that provides features to insert & update drivers coordinates,
 
 ## 1.Project Structure
 In the root folder, there contains several multiple folders :
-`cmd` contains main application code
-`pkg` contains business logic, with framework and DB required for the running of the application.
-`controller` contains code to handle connection between incoming request(s) to server and the defined app business rule.
-`vendor` contains dependencies/libraries used in the app.  
+- `cmd` contains main application code
+- `pkg` contains business logic, with framework and DB required for the running of the application.
+- `controller` contains code to handle connection between incoming request(s) to server and the defined app business rule.
+- `vendor` contains dependencies/libraries used in the app.  
+
+Inside `pkg` folder:
+- `driver` folder containing frameworks & the business logic for drivers
+- `entity` contains enterprise wide business rule and object.
+
+Inside `driver` folder:
+- `mocks` contains generated mock data for testing
+- `repository` contains code for DB 
+- `usecase` contains domain rules, business logic, and serves as an interface between network handler and database.
+
 
 ## 2. Tech Stack
 
@@ -60,6 +70,11 @@ MongoDB is chosen as I have very basic familiarity with it beforehand, which mea
 ## 4. Architecture
 
 Architecture in this project is based on [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).
+Relationship between my project structure and the architecture:
+- `/pkg/entity` represents `Entity`
+- `/pkg/driver/usecase` represents `Usecase`
+- `/pkg/driver/repository` and `/cmd/app.go` represents `Frameworks & Drivers`
+- `/controller` represents `Interface Adapters`
 
 ## 5. Requirements
 1.  Go 1.11 or above
