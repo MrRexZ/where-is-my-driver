@@ -1,49 +1,49 @@
-package cmd
+package main
 
 import (
-	"github.com/gorilla/context"
-	"github.com/gorilla/mux"
+	"encoding/json"
+	"github.com/icrowley/fake"
+	"gojek-1st/cmd/app"
 	"gojek-1st/config"
-	"gojek-1st/controller/handler"
-	"gojek-1st/pkg/driver/repository"
-	"gojek-1st/pkg/driver/usecase"
+	"gojek-1st/pkg/entity"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
-func StartServer() {
-	readClient, err := repository.CreateMongoClient(config.MONGODB_HOST)
+func main() {
+	go app.StartServer()
+	generate50000Drivers()
+	c := time.Tick(60 * time.Second)
+	for range c {
+		generate50000Drivers()
+	}
 
+}
+
+func generate50000Drivers() {
+	client := http.DefaultClient
+	for i := 1; i <= 50000; i++ {
+		driver := entity.Driver{Id: int32(i), Lat: float64(fake.Latitude()), Long: float64(fake.Longitude()), Accuracy: 0.8}
+		updateDriver(client, driver)
+	}
+}
+
+func updateDriver(client *http.Client, driver entity.Driver) {
+	dId := driver.Id
+	driverBody := map[string]float64{"latitude": driver.Lat, "longitude": driver.Long, "accuracy": driver.Accuracy}
+	driverJsonMarshalled, _ := json.Marshal(driverBody)
+	req, err := http.NewRequest("PUT", config.HOST+":"+strconv.Itoa(config.REST_API_PORT)+"/drivers/"+strconv.Itoa(int(dId))+"/location", strings.NewReader(string(driverJsonMarshalled)))
+
+	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatalln(err)
 	}
-
-	writeClient, err := repository.CreateMongoClient(config.MONGODB_HOST)
-
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	mongoRepo := repository.CreateMongoRepository(readClient, writeClient, config.MONGODB_DB_NAME)
-	driverUCase := usecase.NewDriverUsecase(mongoRepo)
-	r := mux.NewRouter()
-	handler.MakeDriverHandlers(r, driverUCase)
-	http.Handle("/", r)
-
-	logger := log.New(os.Stderr, "logger: ", log.Lshortfile)
-	srv := &http.Server{
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
-		Addr:         ":" + strconv.Itoa(config.REST_API_PORT),
-		Handler:      context.ClearHandler(http.DefaultServeMux),
-		ErrorLog:     logger,
-	}
-
-	err = srv.ListenAndServe()
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+	var decodedDriver entity.Driver
+	json.NewDecoder(resp.Body).Decode(&decodedDriver)
+	log.Printf("Driver ID %d updated. ", decodedDriver.Id)
+	defer resp.Body.Close()
 
 }
