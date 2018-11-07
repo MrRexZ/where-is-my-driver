@@ -26,6 +26,10 @@ In the root folder, there contains several multiple folders :
 - `controller` contains code to handle connection between incoming request(s) to server and the defined app business rule.
 - `vendor` contains dependencies/libraries used in the app.  
 
+Inside `app` folder:
+- `main.go` is the main file to start server and simulator to update 50000 drivers latlng info every 1 minute.
+- `app/app.go` is the app file to start the server.
+
 Inside `pkg` folder:
 - `driver` folder containing frameworks & the business logic for drivers
 - `entity` contains enterprise wide business rule and object.
