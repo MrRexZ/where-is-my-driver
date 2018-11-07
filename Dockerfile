@@ -14,7 +14,7 @@ COPY ./ ./
 
 RUN go build \
     -installsuffix 'static' \
-    -o /app .
+    -o /app ./cmd
 
 FROM scratch AS final
 
