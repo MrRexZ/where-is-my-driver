@@ -54,8 +54,13 @@ func (mr *MongoRepository) Get(id int32) (d *entity.Driver, err error) {
 }
 
 func (mr *MongoRepository) GetAll() (ds []*entity.Driver, err error) {
-	cursor, err := mr.readClient.Database(mr.db).Collection(collectionName).Find(nil, nil)
+	cursor, err := mr.readClient.Database(mr.db).Collection(collectionName).Find(context.Background(), nil)
+	if err != nil {
+		log.Println(err.Error())
+		return nil, err
+	}
 	var drivers []*entity.Driver
+
 	for cursor.Next(context.Background()) {
 		driver := entity.Driver{}
 		err = cursor.Decode(&driver)
