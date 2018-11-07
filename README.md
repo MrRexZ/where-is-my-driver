@@ -1,6 +1,6 @@
 # WHERE IS MY GO-JEK DRIVER v3.0- Anthony Tjuatja (anthonytjuatja@gmail.com)
 
-A web server that provides features to insert & update drivers coordinates,
+A ~4 days project to create a web server that provides features to insert & update drivers coordinates,
  and to find drivers.
  Also contains a simulator that insert/update 50000 drivers every 1 minute.
 
@@ -17,6 +17,8 @@ A web server that provides features to insert & update drivers coordinates,
 5.Requirements
 
 6.Instructions
+
+7.Improvement
 
 
 ## 1.Project Structure
@@ -105,4 +107,11 @@ Go to `/cmd` folder and run `go run main.go` in terminal.
 Use web browser or API tools such as Postman to make calls to `http://localhost:8080` with the correct path.
 
 
+## 7. Improvement
+
+Things I didn't manage to do on time :
+
+1.Testing the concurrency performance on how it handles concurrent connections using frameworks, specifically the find operations.
+2.Improve algorithm based on result from point 1.
+3.Improve formatting of code according to good convention for better maintainability
 
