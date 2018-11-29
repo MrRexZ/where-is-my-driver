@@ -23,7 +23,7 @@ func GetConfig() *Config {
 			HostName: envValElseDefault(SERVER_HOST_ENV_KEY, "http://localhost"),
 			Port:     envValElseDefault(SERVER_PORT_ENV_KEY, "8080")},
 		MongoCfg: &MongoDBCfg{
-			HostName: envValElseDefault(MONGO_HOST_ENV_KEY, "mongodb://mongo:27017"),
+			HostName: envValElseDefault(MONGO_HOST_ENV_KEY, "mongodb://localhost:27017"),
 			DbName:   envValElseDefault(MONGO_DB_ENV_KEY, "gojek-db")},
 	}
 

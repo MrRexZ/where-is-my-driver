@@ -94,12 +94,14 @@ Relationship between my project structure and the architecture:
 
 ### 6.1. Starting the server and simulator (generating 50000 drivers info per minute)
 
-With Docker (Linux) :
+#### With Docker (Linux) :
 1. Navigate to the root of the project.
-2. In terminal, enter `docker-compose build` for building the image.
+2. In `config.go`, change default value of Mongo Hostname to `mongodb://mongo:27017` or set that value for env key `MONGO_HOST_ENV_KEY`.
+3. In terminal, enter `docker-compose build` for building the image.
 App can be started by the command `docker-compose up`.
 
-Without Docker :
+#### Without Docker :
+
 From root project folder, run `go run cmd/main.go` in terminal.
 
 
