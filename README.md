@@ -1,4 +1,4 @@
-# WHERE IS MY GO-JEK DRIVER v3.0- Anthony Tjuatja (anthonytjuatja@gmail.com)
+# WHERE IS MY * DRIVER v3.0- Anthony Tjuatja (anthonytjuatja@gmail.com)
 
 A ~4 days project to create a web server that provides features to insert & update drivers coordinates,
  and to find drivers.
@@ -59,7 +59,7 @@ Refer `config_const` for list of environment variables you can make use of to ex
 
 I was searching through the web for language that is simple to learn given the time, with considerations to my background, and the context of the application.
 As this is a web app and concurrency seems to be one of the key requirement, I decided to seek for language that can is capable of handling concurrency well in terms of simplicity and performance.
-Go was among one of the languages, and knowing its reputations among top companies (such as GO-JEK, whose business domain problem fits with the one in this assignment), I decided to go for this language. 
+Go was among one of the languages, and knowing its reputations among top companies (such as *, whose business domain problem fits with the one in this assignment), I decided to go for this language. 
 It has simple concurrency models that is more easier to grasp compared to other major languages, and its native library `net/http` provides support to handle requests concurrently by starting a handler for each request that comes in,
 which will allow me to spend my time efficiently in other areas.
 
@@ -100,7 +100,7 @@ With Docker (Linux) :
 App can be started by the command `docker-compose up`.
 
 Without Docker :
-Go to `/cmd` folder and run `go run main.go` in terminal.
+From root project folder, run `go run cmd/main.go` in terminal.
 
 
 

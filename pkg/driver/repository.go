@@ -1,6 +1,6 @@
 package driver
 
-import "gojek-1st/pkg/entity"
+import "where-is-my-driver/pkg/entity"
 
 type Repository interface {
 	StoreMany(ds []*entity.Driver) error

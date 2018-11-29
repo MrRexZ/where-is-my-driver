@@ -3,14 +3,14 @@ package main
 import (
 	"encoding/json"
 	"github.com/icrowley/fake"
-	"gojek-1st/cmd/app"
-	"gojek-1st/config"
-	"gojek-1st/pkg/entity"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+	"where-is-my-driver/cmd/app"
+	"where-is-my-driver/config"
+	"where-is-my-driver/pkg/entity"
 )
 
 func main() {

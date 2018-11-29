@@ -3,9 +3,9 @@ package usecase
 import (
 	"fmt"
 	"github.com/umahmood/haversine"
-	"gojek-1st/pkg/driver"
-	"gojek-1st/pkg/entity"
 	"math"
+	"where-is-my-driver/pkg/driver"
+	"where-is-my-driver/pkg/entity"
 )
 
 const (

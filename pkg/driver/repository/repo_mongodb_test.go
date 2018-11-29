@@ -2,9 +2,9 @@ package repository
 
 import (
 	"context"
-	"gojek-1st/pkg/entity"
 	"log"
 	"testing"
+	"where-is-my-driver/pkg/entity"
 )
 
 const (

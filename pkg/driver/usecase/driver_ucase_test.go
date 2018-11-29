@@ -2,9 +2,9 @@ package usecase
 
 import (
 	"github.com/stretchr/testify/assert"
-	"gojek-1st/pkg/driver/mocks"
-	"gojek-1st/pkg/entity"
 	"testing"
+	"where-is-my-driver/pkg/driver/mocks"
+	"where-is-my-driver/pkg/entity"
 )
 
 const (

@@ -3,14 +3,14 @@ package app
 import (
 	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
-	"gojek-1st/config"
-	"gojek-1st/controller/handler"
-	"gojek-1st/pkg/driver/repository"
-	"gojek-1st/pkg/driver/usecase"
 	"log"
 	"net/http"
 	"os"
 	"time"
+	"where-is-my-driver/config"
+	"where-is-my-driver/controller/handler"
+	"where-is-my-driver/pkg/driver/repository"
+	"where-is-my-driver/pkg/driver/usecase"
 )
 
 func StartServer() {

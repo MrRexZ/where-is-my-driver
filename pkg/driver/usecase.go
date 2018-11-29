@@ -1,6 +1,6 @@
 package driver
 
-import "gojek-1st/pkg/entity"
+import "where-is-my-driver/pkg/entity"
 
 type Usecase interface {
 	UpdateLocation(id int32, lat float64, long float64, accuracy float64) (int32, error)

@@ -3,12 +3,12 @@ package handler
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"gojek-1st/pkg/driver"
-	"gojek-1st/pkg/driver/usecase"
-	"gojek-1st/pkg/entity"
 	"log"
 	"net/http"
 	"strconv"
+	"where-is-my-driver/pkg/driver"
+	"where-is-my-driver/pkg/driver/usecase"
+	"where-is-my-driver/pkg/entity"
 )
 
 const (

@@ -6,14 +6,14 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"gojek-1st/pkg/driver/mocks"
-	"gojek-1st/pkg/driver/usecase"
-	"gojek-1st/pkg/entity"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
 	"strings"
 	"testing"
+	"where-is-my-driver/pkg/driver/mocks"
+	"where-is-my-driver/pkg/driver/usecase"
+	"where-is-my-driver/pkg/entity"
 )
 
 func TestDriverHandler(t *testing.T) {
